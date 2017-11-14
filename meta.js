@@ -8,9 +8,17 @@ const {
   printMessage,
 } = require('./utils')
 
+const {
+  isTest,
+  addTestAnswers,
+} = require('./scenarios')
+
 module.exports = {
-  helpers: {
-    if_or: function(v1, v2, options) {
+  "metalsmith": {
+    "before": addTestAnswers
+  },
+  "helpers": {
+    "if_or": function (v1, v2, options) {
       if (v1 || v2) {
         return options.fn(this)
       }
