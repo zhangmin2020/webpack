@@ -1,7 +1,14 @@
 'use strict'
 // Template version: {{ template_version }}
 // see http://vuejs-templates.github.io/webpack for documentation.
-
+//
+// proxyTable: {
+//   '*': {
+//     target: 'http://localhost:8099',
+//     changeOrigin: true,
+//     secure: false
+//   }
+// },
 const path = require('path')
 
 module.exports = {
@@ -45,6 +52,10 @@ module.exports = {
   },
 
   build: {
+    //env
+    testEnv: require('./test.env'), //增加后测试环境
+    prodEnv: require('./prod.env'),
+
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

@@ -11,9 +11,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const env = {{#if_or unit e2e}}process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : {{/if_or}}require('../config/prod.env')
+// const env = {{#if_or unit e2e}}process.env.NODE_ENV === 'testing'
+//   ? require('../config/test.env')
+//   : {{/if_or}}require('../config/prod.env')
+//增加修改的测试环境
+const env = process.env.NODE_ENV === 'production' ? config.build.prodEnv : config.build.testEnv
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -37,7 +39,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
-          warnings: false
+          warnings: false,
+          pure_funcs: process.env.NODE_ENV === 'production' ? ['console.log'] : [], // 配置发布时，不被打包的函数
         }
       },
       sourceMap: config.build.productionSourceMap,
@@ -48,7 +51,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
-      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
+      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`,
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
       allChunks: true,
     }),
@@ -63,9 +66,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: {{#if_or unit e2e}}process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : {{/if_or}}config.build.index,
+      // filename: {{#if_or unit e2e}}process.env.NODE_ENV === 'testing'
+      //   ? 'index.html'
+      //   : {{/if_or}}config.build.index,
+      filename: config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
