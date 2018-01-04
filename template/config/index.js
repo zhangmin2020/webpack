@@ -53,7 +53,7 @@ module.exports = {
 
   build: {
     //env
-    testEnv: require('./test.env'), //增加后测试环境
+    testEnv: require('./buildTest.env'), //增加后测试环境
     prodEnv: require('./prod.env'),
 
     // Template for index.html
